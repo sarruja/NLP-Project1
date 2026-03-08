@@ -55,6 +55,9 @@ Project_1/
 
 > ⚠️ Die `/data` Ordner und alle `.pkl` / `.csv` Dateien sind in `.gitignore` – diese müssen lokal vorhanden sein (siehe unten).
 
+> ***ℹ️ Die Wichtigsten Files für uns ist pipeline_functions.py und project1_pipeline.ipynb***
+
+
 ---
 
 ## Dataset herunterladen
@@ -67,8 +70,10 @@ Project_1/
    - `test_labels.csv`
    - `sample_submission.csv`
 
-test.csv und test_labels, könnte eigentlich für testing benutzt werden (statt train.csv zu spliten) aber gibt zu viele -1 values in test_labels.csv
+> ℹ️test.csv und test_labels, könnte eigentlich für testing benutzt werden (statt train.csv zu spliten) aber gibt zu viele -1 values in test_labels.csv
 daher spliitn wir den train.csv in train / test im Code.  
+
+
 ---
 
 ## Experimente ausführen
@@ -82,7 +87,9 @@ Einfach `project1_pipeline.ipynb` von oben nach unten ausführen. Das Notebook:
 
 **Beim ersten Ausführen** werden Cache-Files erstellt (`cache_*_X.pkl`, `cache_*_Y.pkl`) damit preprocessing nicht jedes Mal wiederholt werden muss.
 
-E1 - E6 sind momentan downsampling = True (nimmt nur 20% der Daten --> geht nur drum zum gucken, ob es wirklich funktioniert) für den Abschluss Bericht amcht es Sinn downsample = False zu setzten, um alle daten zu berücksichtigen, geht einfach sehr lange)
+> ℹ️ E1 - E6 sind momentan downsampling = True (nimmt nur 20% der Daten --> geht nur drum zum gucken, ob es wirklich funktioniert) für den Abschluss Bericht amcht es Sinn downsample = False zu setzten, um alle daten zu berücksichtigen, geht einfach sehr lange)
+
+
 ---
 
 ## Experiment-Übersicht
@@ -114,7 +121,7 @@ Features: TF-IDF (1000) und Model: SVM
 wird bereits im .py file vom Dozent gemacht (hate_speech_classification.py) --> Claude hat es baseline genannt  
 
 
-### Warum diese 8 Experimente?
+### ℹ️ Warum diese 8 Experimente?
 
 | ID | Begründung |
 |---|---|
