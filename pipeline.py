@@ -97,12 +97,22 @@ def load_and_preprocess(csv_path='data/train.csv', preprocess_fn=None, cache_pat
             Y.append(label)
     sys.stderr.write('\n')
 
+    original_len = len(X)
+    seen = set()
+    X_dedup, Y_dedup = [], []
+    for text, label in zip(X, Y):
+        if text not in seen:
+            seen.add(text)
+            X_dedup.append(text)
+            Y_dedup.append(label)
+    X, Y = X_dedup, Y_dedup
+
     if cache_path:
         pickle.dump(X, open(cache_path + '_X.pkl', 'wb'))
         pickle.dump(Y, open(cache_path + '_Y.pkl', 'wb'))
         print(f"Saved to cache: {cache_path}")
 
-    print(f"{len(X)} samples loaded | Label distribution: {Counter(Y)}")
+    print(f"Duplicates removed: {original_len - len(X)} | Remaining: {len(X)} | Distribution: {Counter(Y)}")
     return X, Y
 
 
@@ -171,7 +181,7 @@ def run_experiment(X, Y, vectorizer, model, downsample=False, test_size=0.2, ver
         verbose:     print classification report
 
     Returns:
-        dict with f1_macro, f1_toxic, report string
+        dict with f1_macro, f1_hate_speech, report string
     """
     # Vectorize
     X_vec = vectorizer.fit_transform(X)
@@ -190,16 +200,16 @@ def run_experiment(X, Y, vectorizer, model, downsample=False, test_size=0.2, ver
     Y_pred = model.predict(X_test)
 
     # Evaluate
-    report = classification_report(Y_test, Y_pred, target_names=['not toxic', 'toxic'])
+    report = classification_report(Y_test, Y_pred, target_names=['not Hate Speech', 'Hate Speech'])
     f1_macro = f1_score(Y_test, Y_pred, average='macro')
-    f1_toxic = f1_score(Y_test, Y_pred, pos_label=1)
+    f1_hate_speech = f1_score(Y_test, Y_pred, pos_label=1)
 
     if verbose:
         print(report)
 
     return {
         'f1_macro': round(f1_macro, 4),
-        'f1_toxic': round(f1_toxic, 4),
+        'f1_hate_speech': round(f1_hate_speech, 4),
         'report': report
     }
 
@@ -336,10 +346,10 @@ def run_all_experiments(csv_path='data/train.csv', downsample=False, verbose=Fal
             'Vectorizer': f"{exp['vectorizer'].upper()} ({exp['max_features']})",
             'Model': exp['model'],
             'F1 Macro': metrics['f1_macro'],
-            'F1 Toxic': metrics['f1_toxic'],
+            'F1 Hate Speech': metrics['f1_hate_speech'],
         })
 
-        print(f"→ F1 Macro: {metrics['f1_macro']} | F1 Toxic: {metrics['f1_toxic']}")
+        print(f"→ F1 Macro: {metrics['f1_macro']} | F1 Toxic: {metrics['f1_hate_speech']}")
 
     df_results = pd.DataFrame(results)
     return df_results

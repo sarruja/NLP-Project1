@@ -1,7 +1,6 @@
 # Data files
 data/
 *.pkl
-*.csv
 
 # Jupyter checkpoints
 .ipynb_checkpoints/
