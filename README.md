@@ -26,6 +26,7 @@
 - [ ] Finaler Durchlauf mit `downsample=False` für den Report  
 - [ ] Resultate analysieren und interpretieren  
 - [ ] Evtl. wietere Tests falls nötig ?
+- [ ] Bilder die erstellt werdne in seperaten Ordner speichern (falls die überhaupt gebraucht werden)
 - [ ] Paper schreiben (ACL Format, max. 2 Seiten)  
 - [ ] Paper abgeben bis 18.03.2026 12:00  
 
