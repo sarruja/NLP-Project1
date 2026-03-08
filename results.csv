@@ -1,0 +1,9 @@
+ID,Name,Preprocessing,Vectorizer,Model,F1 Macro,F1 Toxic
+E1,Baseline,stem+stop,TFIDF (1000),svm,0.8361,0.7051
+E2,No Preprocessing,none,TFIDF (1000),svm,0.8314,0.6959
+E3,Stopwords only (no Stemming),stop,TFIDF (1000),svm,0.8212,0.679
+E4,Stemming only (no Stopwords),stem,TFIDF (1000),svm,0.8376,0.7071
+E5,Bag of Words,stem+stop,BOW (1000),svm,0.7819,0.6176
+E6,TF-IDF 5000 features,stem+stop,TFIDF (5000),svm,0.8583,0.7422
+E7,Logistic Regression,stem+stop,TFIDF (1000),logreg,0.7795,0.6174
+E8,Naive Bayes,stem+stop,TFIDF (1000),naivebayes,0.7976,0.6253
