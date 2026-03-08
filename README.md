@@ -7,6 +7,30 @@
 
 ---
 
+
+## ✅ TODO
+
+### Done  
+- [x] "Baseline"-Code vom Dozenten verstanden (`hate_speech_classification.py`)  
+- [x] `pipeline_functions.py` erstellt – modulare Funktionen für Preprocessing, Vectorizer, Modelle  
+- [x] `project1_pipeline.ipynb` erstellt – 8 Experimente einzeln ausführbar  
+- [x] Duplicate Removal implementiert
+- [x] Dataset exploriert (Label-Verteilung, Textlängen)  
+- [x] E1 Baseline erfolgreich durchgelaufen
+- [x] Testlauf Experimente mit `downsample=True` (zum sicherstellen das der Code funktioniert)
+
+### Todo  
+- [ ] Ein einfaches Hyperparameter-Experiment (z.B. SVM mit C=0.1, 1, 10)
+- [ ] Outlier detection (sehr lange / sehr kurze Texte)
+- [ ] Learning curve für das beste Modell (hilfreich, nicht ein muss i guess)
+- [ ] Finaler Durchlauf mit `downsample=False` für den Report  
+- [ ] Resultate analysieren und interpretieren  
+- [ ] Evtl. wietere Tests falls nötig ?
+- [ ] Paper schreiben (ACL Format, max. 2 Seiten)  
+- [ ] Paper abgeben bis 18.03.2026 12:00  
+
+---  
+
 ## Goal
 
 Build a systematic experimental pipeline for binary hate speech classification and compare how different **preprocessing**, **feature extraction**, and **model** choices affect performance.
@@ -18,8 +42,8 @@ Build a systematic experimental pipeline for binary hate speech classification a
 ```
 Project_1/
 │
-├── pipeline.py                  ← alle Funktionen (preprocessing, vectorizer, modelle, experiment runner)
-├── pipeline.ipynb               ← Hauptnotebook: Experimente ausführen & Resultate visualisieren
+├── pipeline_functions.py        ← alle Funktionen (preprocessing, vectorizer, modelle, experiment runner)
+├── project1_pipeline.ipynb      ← Hauptnotebook: Experimente ausführen & Resultate visualisieren
 ├── hate_speech_classification.py← originaler Baseline-Code vom Dozenten (nicht verändern)
 │
 ├── results.csv                  ← Experiment-Ergebnisse (wird automatisch generiert)
@@ -37,17 +61,19 @@ Project_1/
 
 1. Kaggle Account erstellen / einloggen
 2. Dataset herunterladen: https://www.kaggle.com/c/jigsaw-toxic-comment-classification-challenge/data
-3. Folgende Files in den `Project_1` Ordner legen (gleiche Ebene wie `pipeline.py`):
+3. Folgende Files in den `data` Ordner legen:
    - `train.csv` ← wird für alle Experimente verwendet
    - `test.csv`
    - `test_labels.csv`
    - `sample_submission.csv`
 
+test.csv und test_labels, könnte eigentlich für testing benutzt werden (statt train.csv zu spliten) aber gibt zu viele -1 values in test_labels.csv
+daher spliitn wir den train.csv in train / test im Code.  
 ---
 
 ## Experimente ausführen
 
-Einfach `pipeline.ipynb` von oben nach unten ausführen. Das Notebook:
+Einfach `project1_pipeline.ipynb` von oben nach unten ausführen. Das Notebook:
 
 1. Lädt und analysiert den Datensatz
 2. Führt alle 8 Experimente automatisch durch
@@ -74,30 +100,49 @@ Prinzip: immer nur **eine Variable ändern**, die anderen zwei auf Baseline-Wert
 | E7 | Logistic Regression | Stem + Stopwords | TF-IDF (1000) | LogReg |
 | E8 | Naive Bayes | Stem + Stopwords | TF-IDF (1000) | NaiveBayes |
 
-**Metric:** F1 Macro (da Datensatz unbalanciert: 90% not toxic / 10% toxic)
+**Metric:** F1 Macro (da Datensatz unbalanciert: 90% not toxic / 10% toxic)  
 
-**Wieso F1 Macro?**   
+*Wieso F1 Macro?*   
 F1-Score ist das harmonische Mittel von Precision und Recall:  
 F1 = 2 * (Precision * Recall) / (Precision + Recall)  
 F1 Macro bedeutet: berechne den F1-Score separat für jede Klasse, dann nimm den Durchschnitt – ungewichtet, also jede Klasse zählt gleich viel.  
-Bei euch: F1 Macro = (F1 "not toxic" + F1 "toxic") / 2  
-  
+Bei euch: F1 Macro = (F1 "not toxic" + F1 "toxic") / 2   
+   
+*Was ist mit Basline gemeint*  
+Preprocessing: Tokenize + Stopword removal + Stemming + Remove numbers   
+Features: TF-IDF (1000) und Model: SVM  
+wird bereits im .py file vom Dozent gemacht (hate_speech_classification.py) --> Claude hat es baseline genannt  
 
-**Was ist mit Basline gemeint**  
-Preprocessing: Tokenize + Stopword removal + Stemming + Remove numbers  
-Features: TF-IDF (1000) und Model: SVM 
-wird bereits im .py file vom Dozent gemacht (hate_speech_classification.py) --> Claude hat es baseline genannt
+
+### Warum diese 8 Experimente?
+
+| ID | Begründung |
+|---|---|
+| E1 | **Baseline** – Grundlage für alle Vergleiche. Ohne Baseline kann man keine Verbesserungen oder Verschlechterungen messen. |
+| E2 | **Kein Preprocessing** – Wichtigste Kontrollfrage: Bringt das ganze Preprocessing überhaupt etwas? Wenn E2 ähnlich gut ist wie E1, war der Aufwand umsonst. |
+| E3 | **Stopwords, kein Stemming** – Isoliert den Effekt von Stemming. Vielleicht schadet Stemming sogar – bei Hate Speech könnten Wortformen wie "killed" vs "kill" relevant sein. |
+| E4 | **Stemming, keine Stopwords** – Isoliert den Effekt von Stopword-Removal. Stopwords wie "you" oder "I" können bei aggressivem Text sogar informativ sein. |
+| E5 | **Bag of Words statt TF-IDF** – TF-IDF gewichtet seltene Wörter höher, BoW behandelt alle gleich. Frage: Sind es eher häufige oder seltene Wörter die Hate Speech signalisieren? |
+| E6 | **TF-IDF mit 5000 Features** – Mehr Features = mehr Vokabular = eventuell bessere Abdeckung. Aber auch mehr Rauschen. Klassischer Tradeoff. |
+| E7 | **Logistic Regression** – Schneller als SVM, oft ähnlich gut. Die Gewichte sind interpretierbar – man kann zeigen welche Wörter am stärksten auf Hate Speech hinweisen. |
+| E8 | **Naive Bayes** – Der klassische Text-Klassifikator, sehr schnell. Guter Vergleichspunkt zu SVM und Logistic Regression. |
+
+
 ---
 
 ## Laufzeit
 
 - Mit `downsample=True` (20% der Daten):
-  E1: ~ 6 - 7min
-  E2:  
-  E3:  
-  E4:  
-  E5:  
-- Mit `downsample=False` (alle Daten): SVM-Experimente können 30–60 Min dauern → für finalen Report über Nacht laufen lassen
+  E1: ~ 7-8 min  
+  E2: ~ 7-8 min  
+  E3: ~ 5-6 min   
+  E4: ~ 10-11 min   
+  E5: ~ 1-2 min
+  E6: ~ 3-4 min
+  E7: ~ < 1min (bereits downsample=False)
+  E8: ~  < 1min (bereits downsample=False)
+
+- Mit `downsample=False` (alle Daten): SVM-Experimente können einges länder dauern für E1-E6 → für finalen Report über Nacht laufen lassen (empfehlung von Claude)
 
 ---
 

@@ -1,9 +1,9 @@
-ID,Name,Preprocessing,Vectorizer,Model,F1 Macro,F1 Toxic
-E1,Baseline,stem+stop,TFIDF (1000),svm,0.8361,0.7051
-E2,No Preprocessing,none,TFIDF (1000),svm,0.8314,0.6959
-E3,Stopwords only (no Stemming),stop,TFIDF (1000),svm,0.8212,0.679
-E4,Stemming only (no Stopwords),stem,TFIDF (1000),svm,0.8376,0.7071
-E5,Bag of Words,stem+stop,BOW (1000),svm,0.7819,0.6176
-E6,TF-IDF 5000 features,stem+stop,TFIDF (5000),svm,0.8583,0.7422
-E7,Logistic Regression,stem+stop,TFIDF (1000),logreg,0.7795,0.6174
-E8,Naive Bayes,stem+stop,TFIDF (1000),naivebayes,0.7976,0.6253
+ID,Name,Preprocessing,Features,Model,F1 Macro,F1 Hate Speech
+E1,Baseline,Stem + Stopwords,TF-IDF (1000),SVM,0.8316,0.6968
+E2,No Preprocessing,None,TF-IDF (1000),SVM,0.8244,0.6825
+E3,Stopwords only,Stopwords,TF-IDF (1000),SVM,0.7979,0.6374
+E4,Stemming only,Stemming,TF-IDF (1000),SVM,0.8238,0.6818
+E5,Bag of Words,Stem + Stopwords,BoW (1000),SVM,0.7848,0.624
+E6,TF-IDF 5000 features,Stem + Stopwords,TF-IDF (5000),SVM,0.8655,0.7554
+E7,Logistic Regression,Stem + Stopwords,TF-IDF (1000),LogReg,0.7725,0.6071
+E8,Naive Bayes,Stem + Stopwords,TF-IDF (1000),NaiveBayes,0.7907,0.6126

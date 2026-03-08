@@ -189,6 +189,8 @@ def run_experiment(X, Y, vectorizer, model, downsample=False, test_size=0.2, ver
     # Downsample for speed
     if downsample:
         X_vec, _, Y, _ = train_test_split(X_vec, Y, test_size=0.8, random_state=42, stratify=Y)
+        print(f"Downsampled to: {X_vec.shape[0]} samples")
+
 
     # Train/test split
     X_train, X_test, Y_train, Y_test = train_test_split(
@@ -349,7 +351,7 @@ def run_all_experiments(csv_path='data/train.csv', downsample=False, verbose=Fal
             'F1 Hate Speech': metrics['f1_hate_speech'],
         })
 
-        print(f"→ F1 Macro: {metrics['f1_macro']} | F1 Toxic: {metrics['f1_hate_speech']}")
+        print(f"→ F1 Macro: {metrics['f1_macro']} | F1 Hate Speech: {metrics['f1_hate_speech']}")
 
     df_results = pd.DataFrame(results)
     return df_results
