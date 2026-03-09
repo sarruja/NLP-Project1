@@ -20,8 +20,8 @@
 - [x] Testlauf Experimente mit `downsample=True` (zum sicherstellen das der Code funktioniert)
 
 ### Todo  
-- [ ] Ein einfaches Hyperparameter-Experiment (z.B. SVM mit C=0.1, 1, 10)
-- [ ] Outlier detection (sehr lange / sehr kurze Texte)
+- [X] Ein einfaches Hyperparameter-Experiment (z.B. SVM mit C=0.1, 1, 10)
+- [X] Outlier detection (sehr lange / sehr kurze Texte)
 - [ ] Learning curve für das beste Modell (hilfreich, nicht ein muss i guess)
 - [ ] Finaler Durchlauf mit `downsample=False` für den Report  
 - [ ] Resultate analysieren und interpretieren  
