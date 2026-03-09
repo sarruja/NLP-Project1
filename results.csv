@@ -5,5 +5,5 @@ E3,Stopwords only,Stopwords,TF-IDF (1000),SVM,0.7979,0.6374
 E4,Stemming only,Stemming,TF-IDF (1000),SVM,0.8238,0.6818
 E5,Bag of Words,Stem + Stopwords,BoW (1000),SVM,0.7848,0.624
 E6,TF-IDF 5000 features,Stem + Stopwords,TF-IDF (5000),SVM,0.8655,0.7554
-E7,Logistic Regression,Stem + Stopwords,TF-IDF (1000),LogReg,0.7725,0.6071
+E7,Logistic Regression,Stem + Stopwords,TF-IDF (1000),LogReg,0.7725,0.6072
 E8,Naive Bayes,Stem + Stopwords,TF-IDF (1000),NaiveBayes,0.7907,0.6126
