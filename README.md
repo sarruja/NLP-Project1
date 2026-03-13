@@ -107,6 +107,7 @@ Prinzip: immer nur **eine Variable ändern**, die anderen zwei auf Baseline-Wert
 | E6 | TF-IDF 5000 | Stem + Stopwords | TF-IDF (5000) | SVM |
 | E7 | Logistic Regression | Stem + Stopwords | TF-IDF (1000) | LogReg |
 | E8 | Naive Bayes | Stem + Stopwords | TF-IDF (1000) | NaiveBayes |
+| E9 | SVM Hyperparameter | Stem + Stopwords | TF-IDF (1000) | SVM (C=0.1/1/10) |
 
 **Metric:** F1 Macro (da Datensatz unbalanciert: 90% not toxic / 10% toxic)  
 
@@ -134,6 +135,7 @@ wird bereits im .py file vom Dozent gemacht (hate_speech_classification.py) --> 
 | E6 | **TF-IDF mit 5000 Features** – Mehr Features = mehr Vokabular = eventuell bessere Abdeckung. Aber auch mehr Rauschen. Klassischer Tradeoff. |
 | E7 | **Logistic Regression** – Schneller als SVM, oft ähnlich gut. Die Gewichte sind interpretierbar – man kann zeigen welche Wörter am stärksten auf Hate Speech hinweisen. |
 | E8 | **Naive Bayes** – Der klassische Text-Klassifikator, sehr schnell. Guter Vergleichspunkt zu SVM und Logistic Regression. |
+| E9 | **SVM Hyperparameter** – Wie stark beeinflusst der C-Parameter die Performance? C kontrolliert den Tradeoff zwischen Margin-Maximierung und Fehlertoleranz. |
 
 
 ---

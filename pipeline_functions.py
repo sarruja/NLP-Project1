@@ -143,20 +143,21 @@ def get_vectorizer(method='tfidf', max_features=1000):
 # 3. MODELS
 # ─────────────────────────────────────────────
 
-def get_model(name='svm'):
+def get_model(name='svm', C=1.0):
     """
     Returns a sklearn classifier.
 
     Args:
         name: 'svm', 'logreg', or 'naivebayes'
+        C:    regularization parameter for SVM and LogReg (default: 1.0)
 
     Returns:
         classifier instance
     """
     if name == 'svm':
-        return SVC(class_weight='balanced', random_state=42)
+        return SVC(C=C, class_weight='balanced', random_state=42)
     elif name == 'logreg':
-        return LogisticRegression(class_weight='balanced', max_iter=1000, random_state=42)
+        return LogisticRegression(C=C, class_weight='balanced', max_iter=1000, random_state=42)
     elif name == 'naivebayes':
         return MultinomialNB()
     else:
