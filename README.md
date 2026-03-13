@@ -20,12 +20,12 @@
 - [x] E9 SVM Hyperparameter-Experiment implementiert (C=0.1, 1, 10)
 - [x] Outlier Detection implementiert (sehr lange / sehr kurze Texte)
 - [x] Finaler Durchlauf mit `downsample=False` für den Report  
+- [x] Resultate analysieren und interpretieren 
+- [x] Paper schreiben (ACL Format, max. 2 Seiten) 
 
 ### Todo  
 - [ ] Learning curve für das beste Modell (hilfreich, nicht ein Muss)  
-- [ ] Resultate analysieren und interpretieren  
 - [ ] Evtl. weitere Tests falls nötig?
-- [ ] Paper schreiben (ACL Format, max. 2 Seiten)  
 - [ ] Paper abgeben bis 18.03.2026 12:00  
 
 ---  
@@ -56,6 +56,7 @@ Project_1/
 ├── figures/                     ← Figures für das Paper (wird automatisch erstellt)
 │   └── fig_*.png
 │
+├── paper/                        ← .tex und pdf Format von unserem Paper
 ├── .gitignore
 └── README.md
 ```

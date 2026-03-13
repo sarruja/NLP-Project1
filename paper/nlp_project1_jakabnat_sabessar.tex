@@ -1,0 +1,238 @@
+\documentclass[11pt,a4paper,twocolumn]{article}
+
+% ─── Packages ────────────────────────────────
+\usepackage[margin=1in,top=1in,bottom=1in]{geometry}
+\usepackage{times}
+\usepackage{booktabs}
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{hyperref}
+\usepackage{microtype}
+\usepackage{natbib}
+\usepackage{titlesec}
+\usepackage{parskip}
+\usepackage{caption}
+\usepackage{xcolor}
+\usepackage{fancyhdr}
+
+% ─── Layout tweaks to mimic ACL ──────────────
+\setlength{\columnsep}{0.4in}
+\titleformat{\section}{\normalfont\bfseries}{\thesection.}{0.5em}{}
+\titleformat{\subsection}{\normalfont\bfseries}{\thesubsection}{0.5em}{}
+\titlespacing*{\section}{0pt}{6pt}{3pt}
+\titlespacing*{\subsection}{0pt}{4pt}{2pt}
+\setlength{\parskip}{3pt}
+\pagestyle{plain}
+
+% ─── Annotation command ──────────────────────
+\newcommand{\authorone}[1]{\textcolor{blue}{#1}}      % Natalie
+\newcommand{\authortwo}[1]{\textcolor{teal}{#1}}      % Sarruja
+\newcommand{\joint}[1]{\textcolor{purple}{#1}}        % Joint
+
+% ─────────────────────────────────────────────
+\begin{document}
+
+\twocolumn[{
+\begin{center}
+{\LARGE\textbf{An Experimental Pipeline for Hate Speech Classification}}\\[4pt]
+{\large Comparing Preprocessing, Feature Extraction, and Models}\\[10pt]
+\begin{tabular}{cc}
+\textbf{Natalie Jakab} & \textbf{Sarruja Sabesan} \\[2pt]
+School of Engineering, ZHAW & School of Engineering, ZHAW \\
+Zurich University of Applied Sciences & Zurich University of Applied Sciences \\
+\texttt{jakabnat@students.zhaw.ch} & \texttt{sabessar@students.zhaw.ch}
+\end{tabular}\\[8pt]
+\end{center}
+\noindent\small\textit{Author contributions are annotated as:}
+\authorone{Natalie (author1)}, \authortwo{Sarruja (author2)}, \joint{joint}
+\vspace{6pt}
+}]
+
+\normalsize
+
+% ─── Abstract ────────────────────────────────
+\begin{abstract}
+\joint{
+We present an experimental pipeline for binary hate speech classification using the Kaggle Jigsaw Toxic Comment dataset.
+Our pipeline systematically evaluates the impact of different preprocessing strategies, feature extraction methods, and classifiers on model performance.
+We run nine experiments while varying one component at a time, measuring F1 Macro as the primary metric to account for the highly imbalanced class distribution (89\% non-hate-speech).
+Our results show that increasing the TF-IDF vocabulary size from 1{,}000 to 5{,}000 features yields the best performance (F1 Macro 0.8766), while SVM consistently outperforms Logistic Regression and Naive Bayes.
+}
+\end{abstract}
+
+% ─── 1. Introduction ─────────────────────────
+\section{Introduction}
+
+\authortwo{
+Automated hate speech detection is an important NLP task with applications in content moderation on social media platforms.
+Building a reliable classification system requires careful choices at each stage of the pipeline: how text is preprocessed, how features are extracted, and which model is used.
+\newline
+In this paper we present a modular and reproducible experimental pipeline that systematically evaluates the impact of each of these choices in isolation.
+We use the Kaggle Jigsaw Toxic Comment Classification dataset \cite{jigsaw2018} and train binary classifiers that distinguish between hate speech and non-hate-speech comments.
+Our key research question is: \textit{How do different preprocessing, feature extraction, and model choices affect classification performance?}
+}
+
+% ─── 2. Data ─────────────────────────────────
+\section{Data}
+
+\joint{
+The dataset consists of 159{,}571 Wikipedia comments, each labelled with one or more of the following categories: \textit{toxic, severe\_toxic, obscene, threat, insult, identity\_hate}, or none. 
+We binarize the labels: any comment with at least one hate-related label is classified as \textit{hate speech} (1), otherwise as \textit{not hate speech} (0).\newline
+The dataset is highly imbalanced: 89.8\% of comments are non-hate-speech (143{,}346 samples) and only 10.2\% are hate speech (16{,}225 samples).
+This imbalance motivates our use of F1 Macro as the primary evaluation metric, which equally weights performance on both classes regardless of their frequency.
+We also apply class-weighted training (\texttt{class\_weight=`balanced'}) to compensate for the skew.\newline
+Duplicate comments were removed prior to all experiments, reducing the dataset by a small margin. Specifically, 1,225 duplicate comments were removed, resulting in 158,346 unique samples.
+The data was split into 80\% training and 20\% test sets with stratification to preserve the class distribution. Figure~\ref{fig:label_dist} in the Appendix illustrates the class imbalance.
+}
+
+% ─── 3. Methods ──────────────────────────────
+\section{Methods}
+
+\subsection{Pipeline Overview}
+
+\authorone{
+Our pipeline consists of three interchangeable stages: (1) preprocessing, (2) feature extraction, and (3) model training.
+Each experiment varies exactly one stage while keeping the other two fixed at their baseline values, following the one-variable-at-a-time principle.
+The baseline configuration (E1) uses stemming + stopword removal, TF-IDF with 1{,}000 features, and a Support Vector Machine (SVM).
+}
+
+\subsection{Preprocessing}
+
+\authortwo{
+We implement four preprocessing configurations:
+\textbf{Stem + Stopwords} (baseline): tokenization, stopword removal, and Snowball stemming.
+\textbf{No preprocessing}: raw lowercased tokens only.
+\textbf{Stopwords only}: stopword removal without stemming.
+\textbf{Stemming only}: stemming without stopword removal.
+Numbers are removed in all configurations.
+}
+
+\subsection{Feature Extraction}
+
+\authorone{
+We compare two feature extraction methods:
+\textbf{TF-IDF} weights terms by their frequency relative to the corpus, downweighting common terms.
+\textbf{Bag-of-Words (BoW)} uses raw term counts.
+We evaluate vocabulary sizes of 1{,}000 and 5{,}000 features.
+}\vspace{-12pt}
+\subsection{Models}
+
+\authortwo{
+We evaluate three classifiers:
+\textbf{SVM} with RBF kernel and class weighting (baseline).
+\textbf{Logistic Regression} with L2 regularization.
+\textbf{Naive Bayes} (Multinomial).
+Additionally, we conduct a hyperparameter experiment varying the SVM regularization parameter $C \in \{0.1, 1, 10\}$.
+}
+
+\subsection{Evaluation Metric}
+
+\joint{
+We report \textbf{F1 Macro}, the unweighted average of the per-class F1 scores.
+This metric penalizes classifiers that ignore the minority class, making it appropriate for imbalanced datasets.
+We additionally report \textbf{F1 Hate Speech} (F1 for the positive class only) to highlight how well each system detects the target class.
+}
+
+% ─── 4. Results ──────────────────────────────
+\section{Results}
+
+\joint{
+Table~\ref{tab:results} summarizes the results of all nine experiments. Figure~\ref{fig:results} in the Appendix visualizes the F1 Macro scores across all experiments.
+}
+
+\begin{table}[h]
+\centering
+\small
+\begin{tabular}{llll}
+\toprule
+\textbf{ID} & \textbf{Name} & \textbf{F1 Macro} & \textbf{F1 HS} \\
+\midrule
+E1 & Baseline (SVM)          & 0.8235 & 0.6855 \\
+E2 & No Preprocessing        & 0.8385 & 0.7114 \\
+E3 & Stopwords only          & 0.8129 & 0.6665 \\
+E4 & Stemming only           & 0.8523 & 0.7355 \\
+E5 & Bag of Words            & 0.7994 & 0.6468 \\
+\textbf{E6} & \textbf{TF-IDF 5000} & \textbf{0.8766} & \textbf{0.7779} \\
+E7 & Logistic Regression     & 0.7725 & 0.6071 \\
+E8 & Naive Bayes             & 0.7907 & 0.6126 \\
+\midrule
+E9 & SVM $C=0.1$             & 0.7951 & 0.6417 \\
+E9 & SVM $C=1$ (default)     & 0.8235 & 0.6855 \\
+E9 & SVM $C=10$              & 0.8211 & 0.6775 \\
+\bottomrule
+\end{tabular}
+\caption{Results of all experiments. Best results in \textbf{bold}.}
+\label{tab:results}
+\end{table}
+\vspace{-8pt}
+% ─── 5. Discussion ───────────────────────────
+\section{Discussion}
+
+\subsection{Preprocessing}
+
+\authortwo{
+Comparing E1 (Stem + Stopwords), E3 (Stopwords only) and E4 (Stemming only) reveals that stemming alone contributes more to performance than stopword removal alone.
+Stemming only (E4) achieves the highest F1 among preprocessing variants (0.8523), outperforming the baseline (E1: 0.8235), suggesting that stemming alone is beneficial while stopword removal may slightly hurt performance by removing potentially informative tokens. Interestingly, E2 (no preprocessing) achieves 0.8385, surpassing the baseline E1 (0.8235), suggesting the SVM is robust to raw text and that our baseline preprocessing does not clearly help.
+}
+
+\subsection{Feature Extraction}
+
+\authorone{
+The most impactful finding is that increasing the TF-IDF vocabulary from 1{,}000 (E1) to 5{,}000 features (E6) improves F1 Macro from 0.8235 to 0.8766 -- the best result overall.
+This suggests that hate speech detection benefits from a richer vocabulary, as offensive terms may be diverse and infrequent.
+BoW (E5) underperforms TF-IDF (E1) with the same vocabulary size (0.7994 vs 0.8235), confirming that TF-IDF's weighting of rare terms is beneficial for this task.
+}
+
+\subsection{Model Comparison}
+
+\authortwo{
+SVM (E1) clearly outperforms both Logistic Regression (E7: 0.7725) and Naive Bayes (E8: 0.7907) under the same baseline settings.
+The SVM's ability to find a maximum-margin decision boundary appears to be particularly effective for this high-dimensional text classification problem.
+}
+
+\subsection{Hyperparameter Sensitivity}
+
+\authorone{
+The SVM regularization experiment shows that the default value $C=1$ achieves the best F1 Macro (0.8235), while $C=0.1$ (0.7951) and $C=10$ (0.8211) both perform worse.
+Lower $C$ (more regularization) notably hurts performance, while higher $C$ has only a minor effect, suggesting the model is well-calibrated at the default value.
+}
+
+% ─── 6. Conclusion ───────────────────────────
+\section{Conclusion}
+
+\joint{
+We developed a modular experimental pipeline for binary hate speech classification and systematically evaluated nine configurations.
+Our main findings are: (1) increasing TF-IDF vocabulary size to 5{,}000 features yields the largest performance gain; (2) SVM outperforms Logistic Regression and Naive Bayes; (3) preprocessing provides modest but consistent improvements; and (4) the SVM is robust to the choice of regularization parameter $C$.
+Future work could explore larger vocabularies, character-level features, or pre-trained language models such as BERT.
+}
+
+% ─── References ──────────────────────────────
+\newpage
+\bibliographystyle{acl_natbib}
+\begin{thebibliography}{99}
+
+\bibitem{jigsaw2018}
+Jigsaw / Conversation AI (2018).
+\textit{Toxic Comment Classification Challenge}.
+Kaggle. \url{https://www.kaggle.com/c/jigsaw-toxic-comment-classification-challenge}
+
+\end{thebibliography}
+
+% ─── Appendix ─────────────────────────────────
+\section*{Appendix}
+
+\begin{figure}[h]
+\raggedright
+\includegraphics[width=0.5\textwidth]{fig_label_distribution.png}
+\caption{Class distribution of the dataset (Not Hate Speech vs. Hate Speech).}
+\label{fig:label_dist}
+\end{figure}
+
+\begin{figure}[h]
+\raggedright
+\includegraphics[width=\textwidth]{fig_results_f1.png}
+\caption{F1 Macro scores for all experiments, grouped by experiment type.}
+\label{fig:results}
+\end{figure}
+
+\end{document}
