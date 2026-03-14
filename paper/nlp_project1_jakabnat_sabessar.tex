@@ -64,12 +64,7 @@ Our results show that increasing the TF-IDF vocabulary size from 1{,}000 to 5{,}
 \section{Introduction}
 
 \authortwo{
-Automated hate speech detection is an important NLP task with applications in content moderation on social media platforms.
-Building a reliable classification system requires careful choices at each stage of the pipeline: how text is preprocessed, how features are extracted, and which model is used.
-\newline
-In this paper we present a modular and reproducible experimental pipeline that systematically evaluates the impact of each of these choices in isolation.
-We use the Kaggle Jigsaw Toxic Comment Classification dataset \cite{jigsaw2018} and train binary classifiers that distinguish between hate speech and non-hate-speech comments.
-Our key research question is: \textit{How do different preprocessing, feature extraction, and model choices affect classification performance?}
+Automated hate speech detection is a critical NLP task in content moderation. Building a reliable classifier requires careful choices at each pipeline stage: preprocessing, feature extraction, and model selection. In this paper, we present a modular experimental pipeline that systematically evaluates these choices in isolation on the Kaggle Jigsaw Toxic Comment dataset \cite{jigsaw2018}, with the goal of understanding which components most affect classification performance.}
 }
 
 % ─── 2. Data ─────────────────────────────────
@@ -81,9 +76,15 @@ We binarize the labels: any comment with at least one hate-related label is clas
 The dataset is highly imbalanced: 89.8\% of comments are non-hate-speech (143{,}346 samples) and only 10.2\% are hate speech (16{,}225 samples).
 This imbalance motivates our use of F1 Macro as the primary evaluation metric, which equally weights performance on both classes regardless of their frequency.
 We also apply class-weighted training (\texttt{class\_weight=`balanced'}) to compensate for the skew.\newline
-Duplicate comments were removed prior to all experiments, reducing the dataset by a small margin. Specifically, 1,225 duplicate comments were removed, resulting in 158,346 unique samples.
+Prior to all experiments, the duplicate comments were removed, reducing the dataset by a small margin. Specifically, 1,225 duplicate comments were removed, resulting in 158,346 unique samples.
 The data was split into 80\% training and 20\% test sets with stratification to preserve the class distribution. Figure~\ref{fig:label_dist} in the Appendix illustrates the class imbalance.
 }
+
+\section{Outlier-Text}
+\joint{
+We performed outlier detection on text lengths using the IQR method (Appendix, Figure~\ref{fig:outlier}). The upper boundary was approximately 138 words; around 8\% of comments exceed this threshold. Outliers were retained since many represent legitimate long-form comments rather than noise.
+}
+
 
 % ─── 3. Methods ──────────────────────────────
 \section{Methods}
@@ -193,8 +194,7 @@ The SVM's ability to find a maximum-margin decision boundary appears to be parti
 \subsection{Hyperparameter Sensitivity}
 
 \authorone{
-The SVM regularization experiment shows that the default value $C=1$ achieves the best F1 Macro (0.8235), while $C=0.1$ (0.7951) and $C=10$ (0.8211) both perform worse.
-Lower $C$ (more regularization) notably hurts performance, while higher $C$ has only a minor effect, suggesting the model is well-calibrated at the default value.
+The SVM regularization experiment (Appendix, Figure~\ref{fig:hyperparam}) shows that C=1 achieves the best F1 Macro (0.8316), while C=0.1 (0.8189) and C=10 (0.8222) perform slightly worse, indicating robustness to this parameter in the given range.
 }
 
 % ─── 6. Conclusion ───────────────────────────
