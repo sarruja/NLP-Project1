@@ -1,12 +1,12 @@
 ID,Name,Preprocessing,Features,Model,F1 Macro,F1 Hate Speech
-E1,Baseline,Stem + Stopwords,TF-IDF (1000),SVM,0.8235,0.6855
-E2,No Preprocessing,None,TF-IDF (1000),SVM,0.8385,0.7114
-E3,Stopwords only,Stopwords,TF-IDF (1000),SVM,0.8129,0.6665
-E4,Stemming only,Stemming,TF-IDF (1000),SVM,0.8523,0.7355
-E5,Bag of Words,Stem + Stopwords,BoW (1000),SVM,0.7994,0.6468
-E6,TF-IDF 5000 features,Stem + Stopwords,TF-IDF (5000),SVM,0.8766,0.7779
-E7,Logistic Regression,Stem + Stopwords,TF-IDF (1000),LogReg,0.7725,0.6071
-E8,Naive Bayes,Stem + Stopwords,TF-IDF (1000),NaiveBayes,0.7907,0.6126
-E9_C0.1,SVM C=0.1,Stem + Stopwords,TF-IDF (1000),SVM,0.7951,0.6417
-E9_C1,SVM C=1 (Baseline),Stem + Stopwords,TF-IDF (1000),SVM,0.8235,0.6855
-E9_C10,SVM C=10,Stem + Stopwords,TF-IDF (1000),SVM,0.8211,0.6775
+E1,Baseline,Stem + Stopwords,TF-IDF (1000),SVM,0.8316,0.6968
+E2,No Preprocessing,None,TF-IDF (1000),SVM,0.8244,0.6825
+E3,Stopwords only,Stopwords,TF-IDF (1000),SVM,0.7979,0.6374
+E4,Stemming only,Stemming,TF-IDF (1000),SVM,0.8238,0.6818
+E5,Bag of Words,Stem + Stopwords,BoW (1000),SVM,0.7848,0.624
+E6,TF-IDF 5000 features,Stem + Stopwords,TF-IDF (5000),SVM,0.8655,0.7554
+E7,Logistic Regression,Stem + Stopwords,TF-IDF (1000),LogReg,0.7794,0.6168
+E8,Naive Bayes,Stem + Stopwords,TF-IDF (1000),NaiveBayes,0.7849,0.6015
+E9_C0.1,SVM C=0.1,Stem + Stopwords,TF-IDF (1000),SVM,0.8189,0.6781
+E9_C1,SVM C=1 (Baseline),Stem + Stopwords,TF-IDF (1000),SVM,0.8316,0.6968
+E9_C10,SVM C=10,Stem + Stopwords,TF-IDF (1000),SVM,0.8222,0.677
